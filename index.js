@@ -1,13 +1,37 @@
+'use strict'
+
 var http = require('http');
 
-var server = http.createServer(function(request, response) {
+const app = function(request, response) {
 
     response.writeHead(200, {"Content-Type": "text/plain"});
     response.end("Hello World!");
 
-});
+}
 
-var port = 80;
-server.listen(port);
+initServer(app).then(() => {console.log("Listening on port 80")})
 
-console.log("Server running at http://localhost:%d", port);
+
+
+async function initServer(app) {
+  return new Promise((resolve, reject) => {
+    const server = http.createServer(app);
+
+    const errorHandler = err => {
+      console.log(`Unable to start WEB server: ${err.message}`);
+      server.removeListener('listening', successHandler);
+      reject(err);
+    };
+
+    const successHandler = () => {
+      console.log(`WEB server has been successfully started on port 80`);
+      server.removeListener('error', errorHandler);
+      resolve(app);
+    };
+    server.once('error', errorHandler);
+    server.once('listening', successHandler);
+
+    // Listen on provided port, on all network interfaces.
+    server.listen(80);
+  });
+}
