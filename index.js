@@ -9,7 +9,7 @@ const app = function(request, response) {
 
 }
 
-initServer(app).then(() => {console.log("Listening on port 80")})
+initServer(app).then(() => {console.log("Listening on port 3000")})
 
 
 
@@ -24,7 +24,7 @@ async function initServer(app) {
     };
 
     const successHandler = () => {
-      console.log(`WEB server has been successfully started on port 80`);
+      console.log(`WEB server has been successfully started on port 3000`);
       server.removeListener('error', errorHandler);
       resolve(app);
     };
@@ -32,6 +32,6 @@ async function initServer(app) {
     server.once('listening', successHandler);
 
     // Listen on provided port, on all network interfaces.
-    server.listen(80);
+    server.listen(3000);
   });
 }
